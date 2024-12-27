@@ -1,40 +1,38 @@
-CREATE USER IF NOT EXISTS 'admin_super'@'%' IDENTIFIED BY 'password';
-
--- GRANT ALL PRIVILEGES ON carvent.* TO 'admin_super'@'%'
-GRANT ALL PRIVILEGES ON carvent.* TO 'admin_super'@'%' WITH GRANT OPTION;
+USE carvent;
 
 FLUSH PRIVILEGES;
 
 USE carvent;
 
--- CREACIÓN DE ROLES
-CREATE ROLE role_select_vistas;
-CREATE ROLE role_empleados;
-CREATE ROLE role_creacion_usuarios;
+-- 1. Rol para lectura de vistas 
+CREATE ROLE 'vista_reader';
+GRANT SELECT ON carvent.* TO 'vista_reader';
 
--- ASIGNACIÓN DE PRIVILEGIOS AL ROL role_select_vistas
-GRANT SELECT ON CLIENTE TO role_select_vistas;
-GRANT SELECT ON DUENO TO role_select_vistas;
-GRANT SELECT ON TIPORESERVA TO role_select_vistas;
-GRANT SELECT ON EMPLEADO TO role_select_vistas;
-GRANT SELECT ON RESTAURANTE TO role_select_vistas;
-GRANT SELECT ON MESA TO role_select_vistas;
-GRANT SELECT ON RESERVA TO role_select_vistas;
+-- 2. Rol para CRUD en tablas
+CREATE ROLE 'tabla_admin';
+GRANT SELECT, INSERT, UPDATE, DELETE ON carvent.* TO 'tabla_admin';
 
--- ASIGNACIÓN DE PRIVILEGIOS AL ROL role_empleados
-GRANT ALL PRIVILEGES ON RESTAURANTE TO role_crud_restaurantes;
-GRANT ALL PRIVILEGES ON MESA TO role_crud_restaurantes;
-GRANT ALL PRIVILEGES ON RESERVA TO role_crud_restaurantes;
-GRANT ALL PRIVILEGES ON TIPORESERVA TO role_crud_restaurantes;
-GRANT ALL PRIVILEGES ON DUENO TO role_crud_restaurantes;
+-- 3. Rol para administración de usuarios
+CREATE ROLE 'user_admin';
+GRANT CREATE USER, DROP USER ON *.* TO 'user_admin';
+GRANT GRANT OPTION ON *.* TO 'user_admin';
 
 
 
--- CREACIÓN DE USUARIOS Y ASIGNACIÓN A ROLES
-CREATE USER 'usuario_select'@'%' IDENTIFIED BY 'password_select';
-GRANT role_select_vistas TO 'usuario_select'@'%';
+-- Ejemplo de cómo asignar roles a usuarios:
+CREATE USER 'viewer'@'localhost' IDENTIFIED BY 'password1';
+GRANT 'vista_reader' TO 'viewer'@'localhost';
 
-CREATE USER 'usuario_crud'@'%' IDENTIFIED BY 'password_crud';
-GRANT role_empleados TO 'usuario_crud'@'%';
+CREATE USER 'editor'@'localhost' IDENTIFIED BY 'password2';
+GRANT 'tabla_admin' TO 'editor'@'localhost';
+
+CREATE USER 'admin'@'localhost' IDENTIFIED BY 'password3';
+GRANT 'user_admin' TO 'admin'@'localhost';
+
+-- Activar los roles para los usuarios
+SET DEFAULT ROLE ALL TO
+    'viewer'@'localhost',
+    'editor'@'localhost',
+    'admin'@'localhost';
 
 FLUSH PRIVILEGES;
