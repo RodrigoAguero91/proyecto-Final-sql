@@ -179,18 +179,18 @@ Se realiza principalmente por medio del archivo population.sql
 ###  Objetos de la base de datos
 ## Documentación de Funciones
 
-# insertar_cliente
+- insertar_cliente:
 Descripción: Registra nuevos clientes en el sistema.
 Parámetros: nombre, apellido, email, teléfono y dirección del cliente
 Retorno: ID del cliente insertado
 Uso: Gestión de la cartera de clientes
 
-insertar_vehiculo: Descripción: Registra nuevos vehículos en el inventario.
-
+- insertar_vehiculo: Descripción: Registra nuevos vehículos en el inventario.
 Parámetros: marca, modelo, año, precio, color y kilometraje del vehículo
 Retorno: ID del vehículo insertado
 Uso: Control de inventario de vehículos
-insertar_pago:
+
+- insertar_pago:
 Descripción: Registra los pagos asociados a las ventas.
 Parámetros: ID de venta, monto, fecha y método de pago
 Retorno: ID del pago insertado
