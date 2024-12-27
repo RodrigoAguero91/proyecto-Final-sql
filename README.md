@@ -207,11 +207,11 @@ Valida el precio de venta: Compara el precio de venta ingresado con el precio ba
 Impide inserciones inválidas: Si el precio de venta no cumple con la condición, se genera un error y se impide que el registro se inserte en la tabla Ventas.
 
 ## Roles y permisos
--vista_reader:
+- vista_reader:
 Permisos: Este rol solo permite seleccionar datos (realizar consultas). Los usuarios con este rol podrán ver la información almacenada en las tablas y vistas, pero no podrán modificarlos.
--tabla_admin:
+- tabla_admin:
 Este rol otorga todos los permisos sobre las tablas: seleccionar, insertar, actualizar y eliminar datos.
--user_admin:
+- user_admin:
  Este rol se encarga de la administración de usuarios y sus permisos. Permite crear nuevos usuarios, eliminarlos y otorgar permisos a otros usuarios.
 
 ## Como levantar el proyecto en CodeSpaces GitHub
