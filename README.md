@@ -42,6 +42,8 @@ Este proyecto implementa una base de datos para "Carvent", un sistema de gestió
 ## Diagrama entidad relacion (DER)
 ![der](https://github.com/user-attachments/assets/74f4d2f5-22c1-4514-a789-fa6e1e2588f2)
 
+## Listado de tablas y descripcion
+
 ## Clientes 
 | Column | Type | Constraints |
 |--------|------|-------------|
@@ -176,10 +178,10 @@ Este proyecto implementa una base de datos para "Carvent", un sistema de gestió
 ## Estructura e ingesta de datos
 Se realiza principalmente por medio del archivo population.sql
 
-### Objetos de la base de datos
-## Documentación de Funciones
+## Objetos de la base de datos
+### Documentación de Funciones
 
-## insertar_cliente
+# insertar_cliente
 Descripción: Registra nuevos clientes en el sistema.
 Parámetros: nombre, apellido, email, teléfono y dirección del cliente
 Retorno: ID del cliente insertado
@@ -195,26 +197,27 @@ Descripción: Registra los pagos asociados a las ventas.
 Parámetros: ID de venta, monto, fecha y método de pago
 Retorno: ID del pago insertado
 Uso: Gestión financiera y seguimiento de pagos
+
 ## Documentación de Triggers
-1. after_sale_update_inventory:
+- 1. after_sale_update_inventory:
 Se ejecuta automáticamente después de que se inserta un nuevo registro en la tabla Ventas.
 Actualiza el inventario: Reduce la cantidad disponible de un vehículo en una unidad cada vez que se registra una venta, asegurando que el inventario se mantenga actualizado en tiempo real.
 Registra un servicio: Agrega un registro a la tabla Servicios para indicar que se realizó una revisión pre-entrega al vehículo vendido.
-2. before_sale_validate_price:
+- 2. before_sale_validate_price:
  Se ejecuta antes de que se inserte un nuevo registro en la tabla Ventas.
 Valida el precio de venta: Compara el precio de venta ingresado con el precio base del vehículo y verifica que no sea inferior al 70% de este último.
 Impide inserciones inválidas: Si el precio de venta no cumple con la condición, se genera un error y se impide que el registro se inserte en la tabla Ventas.
 
 ## Roles y permisos
-1. vista_reader:
+ -1. vista_reader:
 Permisos: Este rol solo permite seleccionar datos (realizar consultas). Los usuarios con este rol podrán ver la información almacenada en las tablas y vistas, pero no podrán modificarlos.
-2. tabla_admin:
+ -2. tabla_admin:
 Este rol otorga todos los permisos sobre las tablas: seleccionar, insertar, actualizar y eliminar datos.
-3. user_admin:
+ -3. user_admin:
  Este rol se encarga de la administración de usuarios y sus permisos. Permite crear nuevos usuarios, eliminarlos y otorgar permisos a otros usuarios.
 
 ## Como levantar el proyecto en CodeSpaces GitHub
-env: Archivo con contraseñas y data secretas
-Makefile: Abstracción de creacción del proyecto
-docker-compose.yml: Permite generar las bases de datos en forma de contenedores
+ -env: Archivo con contraseñas y data secretas
+ -Makefile: Abstracción de creacción del proyecto
+ -docker-compose.yml: Permite generar las bases de datos en forma de contenedores
 
