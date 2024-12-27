@@ -1,135 +1,181 @@
-## Primer DER ontológico de CARVENT
-![image](https://github.com/user-attachments/assets/ee4f9c47-83c4-40ef-8349-f68311d0c513)
-## DER Workbench
-![image](https://github.com/user-attachments/assets/6f04c873-8243-49e4-adc0-7d4d37f66bbc)
+ENTREGA DEL PROYECTO FINAL
+Alumno: Rodrigo Agüero 
+Comisión: 59430
+Profesor: Anderson Michel Torres
+Tutor:Hugo Gonzalez
+
+Tematica del proyecto
+Este proyecto representa una base de datos para un sistema de gestión de una empresa de venta de vehículos (concesionario de autos) llamada "Carvent". La base de datos está diseñada para manejar múltiples aspectos del negocio.
+
+Modelo de Negocio
+1. Gestión de Clientes y Ventas:
+-Registro de información de clientes
+-Control de ventas de vehículos
+-Seguimiento de pagos y transacciones
+2.Inventario y Vehículos:
+-Control detallado del inventario de vehículos
+-Información específica de cada vehículo (marca, modelo, año, precio)
+-Seguimiento de opciones y características de los vehículos
+3. Mantenimiento y Servicios:
+-Registro del historial de mantenimiento
+-Control de servicios realizados
+-Gestión de repuestos
+4.Gestión de Empleados:
+-Registro del personal
+-Asociación de empleados con ventas
+5.Proveedores y Compras:
+-Gestión de proveedores
+-Control de compras de vehículos
+-Manejo de inventario de repuestos
+6.Interacción con Clientes:
+-Sistema de comentarios y feedback
+-Seguimiento de la satisfacción del cliente
+
+Diagrama entidad relacion (DER)
+![der](https://github.com/user-attachments/assets/74f4d2f5-22c1-4514-a789-fa6e1e2588f2)
+
+Listado de tablas y descripcion
+I'll help you organize this SQL schema into a clear table format that shows the structure of each table and its columns. I'll create an artifact that presents this information in a more readable way.
 
 
-# Documentación de la Base de Datos "carvent"
 
-## Descripción General
-La base de datos "carvent" está diseñada para gestionar una concesionaria de vehículos. Su objetivo es facilitar el manejo de clientes, vehículos, ventas, inventario, empleados, pagos, comentarios y mantenimiento de vehículos.
 
-## Estructura de la Base de Datos
 
-### 1. Tabla: Clientes
-- **cliente_id**: `INT` (Primary Key, Auto Increment)
-- **nombre**: `VARCHAR(100)`
-- **apellido**: `VARCHAR(100)`
-- **email**: `VARCHAR(100)` (Unique)
-- **telefono**: `VARCHAR(15)`
-- **direccion**: `VARCHAR(255)` (Unique, Not Null)
+# CarVent Database Schema
 
-**Relaciones:**
-- Relacionada con la tabla **Ventas** a través de **cliente_id**.
-- Relacionada con la tabla **Comentarios** a través de **cliente_id**.
+## Clientes (Customers)
+| Column | Type | Constraints |
+|--------|------|-------------|
+| cliente_id | INT | NOT NULL AUTO_INCREMENT PRIMARY KEY |
+| nombre | VARCHAR(100) | |
+| apellido | VARCHAR(100) | |
+| email | VARCHAR(100) | UNIQUE |
+| telefono | VARCHAR(15) | |
+| direccion | VARCHAR(255) | UNIQUE NOT NULL |
 
----
+## Vehiculos (Vehicles)
+| Column | Type | Constraints |
+|--------|------|-------------|
+| vehiculo_id | INT | NOT NULL AUTO_INCREMENT PRIMARY KEY |
+| marca | VARCHAR(50) | |
+| modelo | VARCHAR(50) | |
+| año | YEAR | |
+| precio | DECIMAL(10, 2) | |
+| color | VARCHAR(30) | |
+| kilometraje | INT | |
 
-### 2. Tabla: Vehículos
-- **vehiculo_id**: `INT` (Primary Key, Auto Increment)
-- **marca**: `VARCHAR(50)`
-- **modelo**: `VARCHAR(50)`
-- **año**: `YEAR`
-- **precio**: `DECIMAL(10, 2)`
-- **color**: `VARCHAR(30)`
-- **kilometraje**: `INT`
+## Ventas (Sales)
+| Column | Type | Constraints |
+|--------|------|-------------|
+| venta_id | INT | NOT NULL AUTO_INCREMENT PRIMARY KEY |
+| cliente_id | INT | FOREIGN KEY REFERENCES Clientes(cliente_id) |
+| vehiculo_id | INT | FOREIGN KEY REFERENCES Vehiculos(vehiculo_id) |
+| fecha_venta | DATETIME | |
+| precio_venta | DECIMAL(10, 2) | |
 
-**Relaciones:**
-- Relacionada con la tabla **Ventas** a través de **vehiculo_id**.
-- Relacionada con la tabla **Inventario** a través de **vehiculo_id**.
-- Relacionada con la tabla **Comentarios** a través de **vehiculo_id**.
-- Relacionada con la tabla **Historial_Mantenimiento** a través de **vehiculo_id**.
+## Inventario (Inventory)
+| Column | Type | Constraints |
+|--------|------|-------------|
+| inventario_id | INT | NOT NULL AUTO_INCREMENT PRIMARY KEY |
+| vehiculo_id | INT | FOREIGN KEY REFERENCES Vehiculos(vehiculo_id) |
+| cantidad | INT | |
+| fecha_ingreso | DATETIME | |
 
----
+## Empleados (Employees)
+| Column | Type | Constraints |
+|--------|------|-------------|
+| empleado_id | INT | NOT NULL AUTO_INCREMENT PRIMARY KEY |
+| venta_id | INT | FOREIGN KEY REFERENCES Ventas(venta_id) |
+| nombre | VARCHAR(100) | |
+| apellido | VARCHAR(100) | |
+| puesto | VARCHAR(50) | |
+| telefono | VARCHAR(15) | |
 
-### 3. Tabla: Ventas
-- **venta_id**: `INT` (Primary Key, Auto Increment)
-- **cliente_id**: `INT`
-- **vehiculo_id**: `INT`
-- **fecha_venta**: `DATETIME`
-- **precio_venta**: `DECIMAL(10, 2)`
+## Pagos (Payments)
+| Column | Type | Constraints |
+|--------|------|-------------|
+| pago_id | INT | NOT NULL AUTO_INCREMENT PRIMARY KEY |
+| venta_id | INT | FOREIGN KEY REFERENCES Ventas(venta_id) |
+| monto | DECIMAL(10, 2) | |
+| fecha_pago | DATETIME | |
+| metodo_pago | VARCHAR(50) | |
 
-**Relaciones:**
-- Relacionada con la tabla **Clientes** a través de **cliente_id**.
-- Relacionada con la tabla **Vehículos** a través de **vehiculo_id**.
-- Relacionada con la tabla **Empleados** a través de **venta_id**.
-- Relacionada con la tabla **Pagos** a través de **venta_id**.
+## Comentarios (Comments)
+| Column | Type | Constraints |
+|--------|------|-------------|
+| comentario_id | INT | NOT NULL AUTO_INCREMENT PRIMARY KEY |
+| vehiculo_id | INT | FOREIGN KEY REFERENCES Vehiculos(vehiculo_id) |
+| cliente_id | INT | FOREIGN KEY REFERENCES Clientes(cliente_id) |
+| comentario | TEXT | |
+| fecha_comentario | DATETIME | |
 
----
+## Historial_Mantenimiento (Maintenance History)
+| Column | Type | Constraints |
+|--------|------|-------------|
+| mantenimiento_id | INT | NOT NULL AUTO_INCREMENT PRIMARY KEY |
+| vehiculo_id | INT | FOREIGN KEY REFERENCES Vehiculos(vehiculo_id) |
+| fecha_mantenimiento | DATETIME | |
+| descripcion | TEXT | |
+| costo | DECIMAL(10, 2) | |
 
-### 4. Tabla: Inventario
-- **inventario_id**: `INT` (Primary Key, Auto Increment)
-- **vehiculo_id**: `INT`
-- **cantidad**: `INT`
-- **fecha_ingreso**: `DATETIME`
+## Modelos (Models)
+| Column | Type | Constraints |
+|--------|------|-------------|
+| modelo_id | INT | NOT NULL AUTO_INCREMENT PRIMARY KEY |
+| nombre_modelo | VARCHAR(50) | |
+| descripcion | TEXT | |
 
-**Relaciones:**
-- Relacionada con la tabla **Vehículos** a través de **vehiculo_id**.
+## Opciones_Vehiculo (Vehicle Options)
+| Column | Type | Constraints |
+|--------|------|-------------|
+| opcion_id | INT | NOT NULL AUTO_INCREMENT PRIMARY KEY |
+| nombre_opcion | VARCHAR(50) | |
+| descripcion | TEXT | |
 
----
+## Vehiculos_Opciones (Vehicle Options Junction)
+| Column | Type | Constraints |
+|--------|------|-------------|
+| vehiculo_id | INT | PRIMARY KEY, FOREIGN KEY REFERENCES Vehiculos(vehiculo_id) |
+| opcion_id | INT | PRIMARY KEY, FOREIGN KEY REFERENCES Opciones_Vehiculo(opcion_id) |
 
-### 5. Tabla: Empleados
-- **empleado_id**: `INT` (Primary Key, Auto Increment)
-- **venta_id**: `INT`
-- **nombre**: `VARCHAR(100)`
-- **apellido**: `VARCHAR(100)`
-- **puesto**: `VARCHAR(50)`
-- **telefono**: `VARCHAR(15)`
+## Proveedores (Suppliers)
+| Column | Type | Constraints |
+|--------|------|-------------|
+| proveedor_id | INT | NOT NULL AUTO_INCREMENT PRIMARY KEY |
+| nombre_proveedor | VARCHAR(100) | |
+| contacto | VARCHAR(100) | |
+| direccion | VARCHAR(255) | |
 
-**Relaciones:**
-- Relacionada con la tabla **Ventas** a través de **venta_id**.
+## Compras (Purchases)
+| Column | Type | Constraints |
+|--------|------|-------------|
+| compra_id | INT | NOT NULL AUTO_INCREMENT PRIMARY KEY |
+| vehiculo_id | INT | FOREIGN KEY REFERENCES Vehiculos(vehiculo_id) |
+| proveedor_id | INT | FOREIGN KEY REFERENCES Proveedores(proveedor_id) |
+| fecha_compra | DATE | |
+| precio_compra | DECIMAL(10,2) | |
 
----
+## Repuestos (Spare Parts)
+| Column | Type | Constraints |
+|--------|------|-------------|
+| repuesto_id | INT | NOT NULL AUTO_INCREMENT PRIMARY KEY |
+| nombre_repuesto | VARCHAR(100) | |
+| descripcion | TEXT | |
+| proveedor_id | INT | FOREIGN KEY REFERENCES Proveedores(proveedor_id) |
+| cantidad | INT | |
+| precio_unitario | DECIMAL(10,2) | |
 
-### 6. Tabla: Pagos
-- **pago_id**: `INT` (Primary Key, Auto Increment)
-- **venta_id**: `INT`
-- **monto**: `DECIMAL(10, 2)`
-- **fecha_pago**: `DATETIME`
-- **metodo_pago**: `VARCHAR(50)`
+## Servicios (Services)
+| Column | Type | Constraints |
+|--------|------|-------------|
+| servicio_id | INT | NOT NULL AUTO_INCREMENT PRIMARY KEY |
+| vehiculo_id | INT | FOREIGN KEY REFERENCES Vehiculos(vehiculo_id) |
+| fecha_servicio | DATETIME | |
+| descripcion | TEXT | |
+| costo | DECIMAL(10,2) | |
 
-**Relaciones:**
-- Relacionada con la tabla **Ventas** a través de **venta_id**.
+Estructura e ingesta de datos
+Se realiza principalmente por medio del archivo population.sql
 
----
+Objetos de la base de datos
 
-### 7. Tabla: Comentarios
-- **comentario_id**: `INT` (Primary Key, Auto Increment)
-- **vehiculo_id**: `INT`
-- **cliente_id**: `INT`
-- **comentario**: `TEXT`
-- **fecha_comentario**: `DATETIME`
-
-**Relaciones:**
-- Relacionada con la tabla **Vehículos** a través de **vehiculo_id**.
-- Relacionada con la tabla **Clientes** a través de **cliente_id**.
-
----
-
-### 8. Tabla: Historial_Mantenimiento
-- **mantenimiento_id**: `INT` (Primary Key, Auto Increment)
-- **vehiculo_id**: `INT`
-- **fecha_mantenimiento**: `DATETIME`
-- **descripcion**: `TEXT`
-- **costo**: `DECIMAL(10, 2)`
-
-**Relaciones:**
-- Relacionada con la tabla **Vehículos** a través de **vehiculo_id**.
-
----
-
-## Problemáticas que Resuelve
-- **Gestión de Clientes**: Permite almacenar y gestionar información de los clientes de manera eficiente, incluyendo datos de contacto y dirección.
-- **Control de Inventario**: Facilita el seguimiento del stock de vehículos disponibles, mejorando la planificación y evitando faltantes.
-- **Registro de Ventas**: Documenta todas las ventas realizadas, proporcionando un historial claro para análisis futuros y auditorías.
-- **Seguimiento de Pagos**: Ayuda a controlar los pagos realizados por los clientes, garantizando que se registren correctamente.
-- **Comentarios y Opiniones**: Permite recoger feedback de los clientes sobre los vehículos, lo que puede ser útil para mejorar el servicio.
-- **Mantenimiento de Vehículos**: Registra el historial de mantenimiento de cada vehículo, ayudando a mantenerlos en condiciones óptimas y mejora la satisfacción del cliente.
-- **Gestión de Empleados**: Almacena información sobre los empleados y sus ventas, lo que facilita el seguimiento del rendimiento del equipo de ventas.
-
----
-
-Esta base de datos integral mejora la eficiencia operativa de la concesionaria, facilitando la toma de decisiones informadas y el análisis de datos.
-```
-
-# proyecto-Final-sql
